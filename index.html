@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>V-Uniforms | Đồng Phục Chất Lượng Cao</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #2a2b6e;
+      --red:  #d7192d;
+      --white: #ffffff;
+      --light: #f4f6fb;
+      --text:  #333344;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      background: var(--light);
+      overflow-x: hidden;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px 60px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    /* Fabric-pattern SVG background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, #1a1b55 0%, #2a2b6e 40%, #3b1e6e 70%, #1a1b55 100%);
+      z-index: 0;
+    }
+
+    /* Decorative diagonal stripes */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 60px,
+        rgba(255,255,255,0.03) 60px,
+        rgba(255,255,255,0.03) 120px
+      );
+      z-index: 1;
+    }
+
+    /* Glowing circle behind logo */
+    .glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(215,25,45,0.18) 0%, transparent 70%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* ===== LOGO ===== */
+    .logo-wrap {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 0 6px rgba(255,255,255,0.15), 0 12px 50px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      margin-bottom: 32px;
+    }
+
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* ===== BADGE ===== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red);
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 30px;
+      margin-bottom: 24px;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(215,25,45,0.5); }
+      50%       { box-shadow: 0 0 0 10px rgba(215,25,45,0); }
+    }
+
+    .badge span.dot {
+      width: 7px; height: 7px;
+      background: white;
+      border-radius: 50%;
+      animation: blink 1.2s step-start infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* ===== HEADINGS ===== */
+    h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(20px, 3.5vw, 36px);
+      font-weight: 900;
+      color: white;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      text-shadow: 0 3px 20px rgba(0,0,0,0.4);
+    }
+
+    h1 span { color: #f8b4bc; }
+
+    .subtitle {
+      font-size: clamp(13px, 1.8vw, 15px);
+      color: rgba(255,255,255,0.82);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    /* ===== CONTACT CARD ===== */
+    .contact-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 20px;
+      padding: 36px 40px;
+      max-width: 460px;
+      width: 100%;
+      margin-bottom: 48px;
+    }
+
+    .contact-card h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      text-decoration: none;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: background 0.25s, transform 0.2s;
+    }
+
+    .contact-item:hover {
+      background: rgba(255,255,255,0.14);
+      transform: translateY(-2px);
+    }
+
+    .contact-item .icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 22px;
+    }
+
+    .icon-phone { background: linear-gradient(135deg, #d7192d, #ff4d5e); }
+    .icon-zalo  { background: linear-gradient(135deg, #0068ff, #00aaff); }
+
+    .contact-item .info { text-align: left; }
+    .contact-item .info .label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .contact-item .info .number {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255,255,255,0.4);
+      font-size: 13px;
+      margin: 8px 0 24px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* ===== FORM ===== */
+    .form-section {
+      background: white;
+      border-radius: 20px;
+      padding: 36px 40px;
+      max-width: 460px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+
+    .form-section h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .form-section p {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 24px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #e0e3ef;
+      border-radius: 10px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: #fafbff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(42,43,110,0.1);
+      background: white;
+    }
+
+    .form-group textarea { resize: vertical; min-height: 90px; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--navy), #3b3c9e);
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(42,43,110,0.35);
+    }
+
+    .btn-submit:active { transform: translateY(0); }
+
+    /* ===== SUCCESS MESSAGE ===== */
+    #success-msg {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: #eafaf1;
+      border: 1.5px solid #2ecc71;
+      color: #1a7a43;
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      position: relative;
+      z-index: 3;
+      color: rgba(255,255,255,0.35);
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      padding-top: 12px;
+    }
+
+    /* ===== FLOATING THREADS (decorative) ===== */
+    .threads {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .thread {
+      position: absolute;
+      width: 2px;
+      border-radius: 2px;
+      opacity: 0.06;
+      background: white;
+      animation: drift linear infinite;
+    }
+
+    @keyframes drift {
+      0%   { transform: translateY(-100px) rotate(var(--r)); opacity: 0; }
+      10%  { opacity: 0.08; }
+      90%  { opacity: 0.08; }
+      100% { transform: translateY(110vh) rotate(var(--r)); opacity: 0; }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 500px) {
+      .contact-card, .form-section { padding: 28px 22px; }
+      .logo-wrap { width: 140px; height: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <!-- Glow -->
+  <div class="glow"></div>
+
+  <!-- Decorative drifting threads -->
+  <div class="threads" id="threads"></div>
+
+  <div class="hero-content">
+
+    <!-- Logo -->
+    <div class="logo-wrap">
+      <img src="https://raw.githubusercontent.com/chipblack996/uvn/main/LogoUVN.jpg" alt="V-Uniforms Logo" />
+    </div>
+
+    <!-- Status badge -->
+    <div class="badge"><span class="dot"></span>Website đang nâng cấp</div>
+
+    <!-- Heading -->
+    <h1>Đồng Phục <span>Chất Lượng Cao</span><br/>Cho Doanh Nghiệp</h1>
+
+    <p class="subtitle">
+      Chúng tôi đang cải thiện trải nghiệm để phục vụ bạn tốt hơn.<br/>
+      Trong thời gian này, vui lòng liên hệ trực tiếp để được tư vấn.
+    </p>
+
+    <!-- Contact card -->
+    <div class="contact-card">
+      <h2>Liên hệ tư vấn ngay</h2>
+
+      <a href="tel:0939896893" class="contact-item">
+        <div class="icon icon-phone">📞</div>
+        <div class="info">
+          <div class="label">Hotline</div>
+          <div class="number">0939 896 893</div>
+        </div>
+      </a>
+
+      <a href="https://zalo.me/0939896893" target="_blank" class="contact-item">
+        <div class="icon icon-zalo">💬</div>
+        <div class="info">
+          <div class="label">Zalo</div>
+          <div class="number">0939 896 893</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Form -->
+    <div class="form-section">
+      <h2>Để lại thông tin</h2>
+      <p>Chúng tôi sẽ liên hệ lại trong vòng <strong>30 phút</strong></p>
+
+      <form id="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label for="name">Họ và tên *</label>
+          <input type="text" id="name" placeholder="Nguyễn Văn A" required />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Số điện thoại *</label>
+          <input type="tel" id="phone" placeholder="0xxx xxx xxx" required />
+        </div>
+
+        <div class="form-group">
+          <label for="product">Loại đồng phục quan tâm</label>
+          <select id="product">
+            <option value="">-- Chọn loại sản phẩm --</option>
+            <option>Áo thun</option>
+            <option>Áo sơ mi</option>
+            <option>Áo khoác</option>
+            <option>Tập dề</option>
+            <option>Quần áo blouse, y tế</option>
+            <option>Đồng phục bảo hộ lao động</option>
+            <option>Khác</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="note">Ghi chú thêm</label>
+          <textarea id="note" placeholder="Số lượng, yêu cầu đặc biệt..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Gửi thông tin ngay →</button>
+
+        <div id="success-msg">
+          ✅ &nbsp;Cảm ơn bạn! Chúng tôi sẽ liên hệ sớm nhất.
+        </div>
+      </form>
+    </div>
+
+    <div class="footer">
+      &copy; 2025 V-Uniforms &mdash; Chuyên sản xuất đồng phục chất lượng cao
+    </div>
+
+  </div>
+</section>
+
+<script>
+  // Decorative floating threads
+  const container = document.getElementById('threads');
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('div');
+    el.className = 'thread';
+    const left = Math.random() * 100;
+    const height = 60 + Math.random() * 120;
+    const duration = 8 + Math.random() * 14;
+    const delay = -Math.random() * duration;
+    const rotate = -20 + Math.random() * 40;
+    el.style.cssText = `
+      left:${left}%;
+      height:${height}px;
+      animation-duration:${duration}s;
+      animation-delay:${delay}s;
+      --r:${rotate}deg;
+    `;
+    container.appendChild(el);
+  }
+
+  // ⚠️ Thay APPS_SCRIPT_URL bằng URL Web App sau khi deploy Apps Script
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwzRrjqzF_1e364e2yy138l93iPs_nHjzcLNmvADSZFMrmCvOdWYuLhm8Kk7CtA8aR0/exec";
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Đang gửi...';
+    btn.disabled = true;
+
+    const payload = {
+      name:    document.getElementById('name').value,
+      phone:   document.getElementById('phone').value,
+      product: document.getElementById('product').value,
+      note:    document.getElementById('note').value
+    };
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (err) {
+      console.error('Lỗi gửi form:', err);
+    }
+
+    document.getElementById('contact-form').reset();
+    btn.textContent = 'Gửi thông tin ngay →';
+    btn.disabled = false;
+    const msg = document.getElementById('success-msg');
+    msg.style.display = 'flex';
+    setTimeout(() => msg.style.display = 'none', 5000);
+  }
+</script>
+
+</body>
+</html>
