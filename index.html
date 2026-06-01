@@ -1886,8 +1886,10 @@ function pdfDoDirect(){
       body:JSON.stringify({action:'ocrAndWriteDonHang',key:key,fileName:f.name,b64:f.b64})})
     .then(function(r){return r.json();})
     .then(function(res){
-      if(res.ok){results.push({ten:f.name,ok:true,maDonHang:res.ma||'—',tenKH:res.ten||'—',ngayGiao:res.ngayGiao||'—',maSP:res.sp||'—',soLuong:res.sl||0});}
-      else{results.push({ten:f.name,ok:false,loi:res.error||'Lỗi không xác định'});}
+      if(res.ok){
+        var d=res.data||res;
+        results.push({ten:f.name,ok:true,maDonHang:d.ma||'—',tenKH:d.ten||'—',ngayGiao:d.ngayGiao||'—',maSP:d.sp||'T',soLuong:d.sl||0});
+      } else{results.push({ten:f.name,ok:false,loi:res.error||'Lỗi không xác định'});}
       done++;if(done===total)pdfFinishDirect(results);
     })
     .catch(function(e){
