@@ -1830,9 +1830,7 @@ function pdfDoPreview(){
   if(!_pdfFiles.length)return;
   var f=_pdfFiles[0];
   if(!f.b64){pdfShowNote('err','File chưa đọc xong, vui lòng đợi.');return;}
-  pdfStep(2);
-  pdfShowProg(20,'Đang gửi file lên OCR...');
-  pdfSetFooter('preview');
+  pdfStep(2);pdfShowProg(20,'Đang gửi file lên OCR...');pdfSetFooter('preview');
   var url=CFG_DATA&&CFG_DATA.urls&&CFG_DATA.urls.csdlDonHang?CFG_DATA.urls.csdlDonHang:'';
   if(!url){pdfHideProg();pdfShowNote('err','Chưa cấu hình URL Apps Script. Vào Cấu hình → Kết nối nguồn.');return;}
   var key=CFG_DATA&&CFG_DATA.urls&&CFG_DATA.urls.apiKey?CFG_DATA.urls.apiKey:'';
@@ -1877,27 +1875,24 @@ function pdfDoDirect(){
   if(!url){alert('Chưa cấu hình URL Apps Script!');return;}
   var key=CFG_DATA&&CFG_DATA.urls&&CFG_DATA.urls.apiKey?CFG_DATA.urls.apiKey:'';
   pdfStep(2);pdfShowProg(10,'Đang xử lý...');pdfSetFooter('processing');
-  var results=[];var done=0;
+  var results=[];var done=0;var total=_pdfFiles.length;
   _pdfFiles.forEach(function(f,idx){
-    if(!f.b64){results.push({ten:f.name,ok:false,loi:'File chưa đọc xong'});done++;if(done===_pdfFiles.length)pdfFinishDirect(results);return;}
-    pdfSetProg(10+Math.round(80*done/_pdfFiles.length),'Đang OCR file '+(idx+1)+'/'+_pdfFiles.length+'...');
-    fetch(url,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'ocrAndWriteDonHang',key:key,fileName:f.name,b64:f.b64})
-    })
+    if(!f.b64){
+      results.push({ten:f.name,ok:false,loi:'File chưa đọc xong'});
+      done++;if(done===total)pdfFinishDirect(results);return;
+    }
+    pdfSetProg(10+Math.round(80*done/total),'Đang OCR file '+(idx+1)+'/'+total+'...');
+    fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'ocrAndWriteDonHang',key:key,fileName:f.name,b64:f.b64})})
     .then(function(r){return r.json();})
     .then(function(res){
-      if(res.ok&&res.data){
-        results.push({ten:f.name,ok:true,maDonHang:res.data.ma||'—',tenKH:res.data.ten||'—',ngayGiao:res.data.ngayGiao||'—',maSP:res.data.sp||'—',soLuong:res.data.sl||0});
-      } else {
-        results.push({ten:f.name,ok:false,loi:res.error||'Lỗi không xác định'});
-      }
-      done++;if(done===_pdfFiles.length)pdfFinishDirect(results);
+      if(res.ok){results.push({ten:f.name,ok:true,maDonHang:res.ma||'—',tenKH:res.ten||'—',ngayGiao:res.ngayGiao||'—',maSP:res.sp||'—',soLuong:res.sl||0});}
+      else{results.push({ten:f.name,ok:false,loi:res.error||'Lỗi không xác định'});}
+      done++;if(done===total)pdfFinishDirect(results);
     })
     .catch(function(e){
       results.push({ten:f.name,ok:false,loi:'Lỗi mạng: '+e.message});
-      done++;if(done===_pdfFiles.length)pdfFinishDirect(results);
+      done++;if(done===total)pdfFinishDirect(results);
     });
   });
 }
@@ -1907,32 +1902,27 @@ function pdfFinishDirect(results){
   pdfShowResult({soFile:results.length,soThanhCong:ok,soBoQua:0,soLoi:results.length-ok,
     soDonGhiCSDL:ok,soDonGhiTongThe:ok,tongGiay:0,chiTiet:results});
 }
-
 function pdfDoConfirm(){
-  if(!_pdfOcrData){pdfShowNote('err','Chưa có dữ liệu OCR. Vui lòng xem trước trước.');return;}
+  if(!_pdfOcrData){pdfShowNote('err','Chưa có dữ liệu OCR.');return;}
   var url=CFG_DATA&&CFG_DATA.urls&&CFG_DATA.urls.csdlDonHang?CFG_DATA.urls.csdlDonHang:'';
   var key=CFG_DATA&&CFG_DATA.urls&&CFG_DATA.urls.apiKey?CFG_DATA.urls.apiKey:'';
   pdfStep(3);pdfShowProg(30,'Đang ghi CSDL...');pdfSetFooter('processing');
-  fetch(url,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(Object.assign({action:'writeDonHang',key:key,nguon:'PDF_OCR'},_pdfOcrData))
-  })
+  fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(Object.assign({action:'writeDonHang',key:key,nguon:'PDF_OCR'},_pdfOcrData))})
   .then(function(r){return r.json();})
   .then(function(res){
     pdfSetProg(100,'Hoàn tất!');pdfHideProg();
     if(res.ok){
       pdfShowResult({soFile:1,soThanhCong:1,soBoQua:0,soLoi:0,soDonGhiCSDL:1,soDonGhiTongThe:1,tongGiay:0,
-        chiTiet:[{ten:_pdfFiles[0].name,ok:true,maDonHang:res.data&&res.data.ma||_pdfOcrData.ma||'—',
-          tenKH:_pdfOcrData.ten||'—',ngayGiao:_pdfOcrData.ngayGiao||'—',maSP:_pdfOcrData.sp||'—',soLuong:_pdfOcrData.sl||0}]});
+        chiTiet:[{ten:_pdfFiles[0]?_pdfFiles[0].name:'file.pdf',ok:true,
+          maDonHang:_pdfOcrData.maDonHang||'—',tenKH:_pdfOcrData.tenKhachHang||'—',
+          ngayGiao:_pdfOcrData.ngayGiaoHang||'—',maSP:_pdfOcrData.maSP||'—',soLuong:_pdfOcrData.soLuong||0}]});
     } else {
-      pdfShowNote('err','Ghi lỗi: '+(res.error||'Không xác định'));
-      pdfSetFooter('preview');
+      pdfHideProg();pdfShowNote('err','Ghi lỗi: '+(res.error||'Không xác định'));pdfSetFooter('preview');
     }
   })
-  .catch(function(e){pdfHideProg();pdfShowNote('err','Lỗi mạng: '+e.message);pdfSetFooter('preview');});
+  .catch(function(e){pdfHideProg();pdfShowNote('err','Lỗi: '+e.message);pdfSetFooter('preview');});
 }
-
 function pdfShowResult(r){
   pdfStep(3);
   document.getElementById('pdfZoneWrap').style.display='none';
